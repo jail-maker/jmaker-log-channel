@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+
+# PROVIDE: jmaker_log_channel
+# REQUIRE: NETWORKING
+
+. /etc/rc.subr
+
+export PATH="$PATH:/usr/local/bin"
+_programm="jmaker-log-channel"
+_procname="/usr/local/bin/${_programm}"
+
+name="jmaker_log_channel"
+rcvar=${name}_enable
+
+load_rc_config $name
+
+pidfile="/var/run/${_programm}"
+procname="/usr/local/bin/node"
+command="/usr/sbin/daemon"
+
+: ${jmaker_log_channel_enable="NO"}
+: ${jmaker_log_channel_config="/usr/local/etc/${_programm}.yml"}
+
+command_args="-f -t ${_programm} -p ${pidfile} ${_procname}"
+
+run_rc_command "$1"
