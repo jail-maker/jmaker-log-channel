@@ -1,0 +1,14 @@
+etc/rc.d/jmaker-log-channel
+
+share/jmaker-log-channel/index.js
+share/jmaker-log-channel/libs/channel.js
+share/jmaker-log-channel/LICENSE
+share/jmaker-log-channel/package.json
+share/jmaker-log-channel/README.md
+
+@postexec /bin/ln -s ${PKG_PREFIX}/share/jmaker-log-channel/index.js ${PKG_PREFIX}/bin/jmaker-log-channel
+@postexec /usr/local/bin/yarn --cwd=${PKG_PREFIX}/share/jmaker-log-channel
+
+@postunexec /bin/rm ${PKG_PREFIX}/bin/jmaker-log-channel
+@postunexec /bin/rm -rdf ${PKG_PREFIX}/share/jmaker-log-channel/node_modules
+@postunexec /bin/rm ${PKG_PREFIX}/share/jmaker-log-channel/yarn.lock
