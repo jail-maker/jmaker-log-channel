@@ -13,21 +13,31 @@ wss.on('connection', (ws, req) => {
 
     const location = url.parse(req.url, true);
 
-    ws.on('message', name => {
+    ws.on('message', message => {
 
-        name = `jmaker:log:${name}`;
-        let channel = new Channel(name);
-        let messageListener = (name, message) => {
+        message = JSON.parse(message);
+        console.log(message);
 
-            let temp = JSON.parse(message);
-            ws.send(message);
-            if (temp.last) ws.close();
+        switch (message.action) {
 
-        };
+            case 'connect':
+                let outName = `jmaker:log:${message.channel}`;
+                let outCh = new Channel(outName);
 
-        channel.subscribe(messageListener);
+                let messageListener = (name, message) => {
 
-        ws.on('close', _ => channel.close());
+                    let temp = JSON.parse(message);
+                    ws.send(message);
+                    if (temp.last) ws.close();
+
+                };
+
+                outCh.subscribe(messageListener);
+                ws.on('close', _ => outCh.close());
+
+                break;
+
+        }
 
     });
 
